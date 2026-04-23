@@ -4,7 +4,7 @@ This works like the MnB text background animation setup:
 
 1. Add one CDN script in Webstudio custom code.
 2. Add an HTML Embed for the SVG.
-3. Add `dv_path` to the SVG path.
+3. Add `dv_path`, `dv_path_trigger`, and `dv_path_scrub` to the SVG path.
 4. Add a small CSS block for positioning.
 
 The script auto-loads GSAP and ScrollTrigger. You do not need to add separate GSAP scripts.
@@ -53,6 +53,7 @@ Add a Webstudio HTML Embed near the top of the page. Paste this:
 
     <path
       dv_path
+      dv_path_trigger=".msc-page"
       dv_path_scrub="1.1"
       dv_path_gradient="#msc-scroll-gradient"
       dv_path_gradient_center="720 500"
@@ -73,9 +74,10 @@ The important part is this attribute on the SVG path:
 dv_path
 ```
 
-If you want to control the smoothness, also add:
+Then add the scroll trigger and scrub attributes:
 
 ```html
+dv_path_trigger=".msc-page"
 dv_path_scrub="1.1"
 ```
 
@@ -104,22 +106,18 @@ Add this in Webstudio custom CSS:
 }
 ```
 
-## 4) Optional Page Wrapper Class
+## 4) Add the Page Wrapper Class
 
-You can skip this step for the simple setup. If your page has a main wrapper that contains all scroll sections, you can add this class:
+Select the main Webstudio wrapper that contains the sections you want to use for scroll timing. Add this class:
 
 ```text
 msc-page
 ```
 
-With only `dv_path` and `dv_path_scrub`, the script uses the full document scroll from page top to page bottom.
-
-You only need a custom trigger when you want the path timing tied to one specific wrapper:
+This class must match the path trigger:
 
 ```html
-dv_path_trigger=".your-wrapper"
-dv_path_start="top top"
-dv_path_end="bottom bottom"
+dv_path_trigger=".msc-page"
 ```
 
 ## Simple Attribute Setup
@@ -129,6 +127,7 @@ Use this as the default:
 ```html
 <path
   dv_path
+  dv_path_trigger=".msc-page"
   dv_path_scrub="1.1"
   ...
 ></path>
@@ -139,6 +138,7 @@ In Webstudio attributes, that means:
 | Attribute | Value |
 |---|---|
 | `dv_path` | `true` |
+| `dv_path_trigger` | `.msc-page` |
 | `dv_path_scrub` | `1.1` |
 
 For debugging, temporarily add:
@@ -158,12 +158,13 @@ For debugging, temporarily add:
 
 - `dv_path_scrub="1.1"`: smooths the scroll animation.
 - `dv-path-scrub="1.1"`: dashed alias for `dv_path_scrub`.
+- `dv_path_trigger=".msc-page"`: the wrapper that controls the scroll range.
+- `dv-path-trigger=".msc-page"`: dashed alias for `dv_path_trigger`.
 
 These are built-in defaults, so you usually do not need to add them:
 
-- Trigger: full document scroll.
-- Start: page top.
-- End: page bottom.
+- `dv_path_start="top top"`: starts when the trigger top reaches the viewport top.
+- `dv_path_end="bottom bottom"`: ends when the trigger bottom reaches the viewport bottom.
 
 Advanced overrides are still supported:
 
@@ -235,6 +236,8 @@ Reveal attributes:
 - Script is in `Project Settings > Custom Code > Before </body>`.
 - SVG is inside an HTML Embed.
 - SVG `<path>` has `dv_path` or `dv-path`.
+- SVG `<path>` has `dv_path_trigger=".msc-page"`.
+- Your scroll wrapper has class `msc-page`.
 - CSS has `.msc-path-layer`.
 - The path has a visible `stroke`.
 
