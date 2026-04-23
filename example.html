@@ -25,20 +25,20 @@
         background: linear-gradient(180deg, #fbf8f2 0%, var(--bg) 42%, #efe3d8 100%);
       }
 
-      .dv-path-layer {
+      .msc-path-layer {
         position: fixed;
         inset: 0;
         z-index: 0;
         pointer-events: none;
       }
 
-      .dv-path-layer svg {
+      .msc-path-layer svg {
         width: 100%;
         height: 100%;
         overflow: visible;
       }
 
-      .page {
+      .msc-page {
         position: relative;
         z-index: 1;
       }
@@ -111,11 +111,11 @@
     <script src="./dist/svg-path-webstudio.js"></script>
 
     <!-- Paste this SVG in a Webstudio HTML Embed. -->
-    <div class="dv-path-layer" aria-hidden="true">
+    <div class="msc-path-layer" aria-hidden="true">
       <svg viewBox="0 0 1440 1000" preserveAspectRatio="none">
         <defs>
           <linearGradient
-            id="scroll-gradient"
+            id="msc-scroll-gradient"
             x1="420"
             y1="80"
             x2="650"
@@ -131,14 +131,14 @@
 
         <path
           dv-path
-          dv-path-trigger=".page"
+          dv-path-trigger=".msc-page"
           dv-path-start="top top"
           dv-path-end="bottom bottom"
           dv-path-scrub="1.1"
-          dv-path-gradient="#scroll-gradient"
+          dv-path-gradient="#msc-scroll-gradient"
           dv-path-gradient-center="720 500"
           fill="none"
-          stroke="url(#scroll-gradient)"
+          stroke="url(#msc-scroll-gradient)"
           stroke-width="12"
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -147,7 +147,7 @@
       </svg>
     </div>
 
-    <main class="page">
+    <main class="msc-page">
       <section class="hero">
         <div class="inner" dv-reveal dv-reveal-stagger="0.08">
           <h1>SVG path animation for Webstudio.</h1>

@@ -1,5 +1,5 @@
 {
-  "name": "vsw-svg-path-webstudio",
+  "name": "msc-svg-path-animation",
   "version": "1.0.0",
   "description": "Attribute-driven SVG path draw animations for Webstudio",
   "main": "dist/svg-path-webstudio.js",
