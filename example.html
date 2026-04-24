@@ -115,10 +115,21 @@
       <svg viewBox="0 0 1440 1000" preserveAspectRatio="none">
         <defs>
           <linearGradient
+            id="msc-autoplay-gradient"
+            x1="180"
+            y1="80"
+            x2="680"
+            y2="340"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stop-color="#0ea5e9"></stop>
+            <stop offset="100%" stop-color="#22c55e"></stop>
+          </linearGradient>
+          <linearGradient
             id="msc-scroll-gradient"
             x1="420"
-            y1="80"
-            x2="650"
+            y1="140"
+            x2="720"
             y2="930"
             gradientUnits="userSpaceOnUse"
           >
@@ -135,6 +146,21 @@
           dv-path-duration="5"
           dv-path-repeat="once"
           dv-path-debug="true"
+          dv-path-gradient="#msc-autoplay-gradient"
+          dv-path-gradient-center="720 500"
+          fill="none"
+          stroke="url(#msc-autoplay-gradient)"
+          stroke-width="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M 180 150 C 320 40, 540 50, 680 190 S 980 360, 1160 250"
+        ></path>
+
+        <path
+          dv-path
+          dv-path-mode="scroll"
+          dv-path-trigger=".msc-page"
+          dv-path-scrub="1.1"
           dv-path-gradient="#msc-scroll-gradient"
           dv-path-gradient-center="720 500"
           fill="none"
@@ -159,8 +185,8 @@
           <div>
             <h2>Target the wrapper.</h2>
             <p>
-              The path uses custom attributes, so the same CDN script can animate any SVG path you place in an
-              embed.
+              This demo intentionally mixes one autoplay path and one scroll path on the same page while the
+              content blocks still use `dv-reveal`.
             </p>
           </div>
           <div class="visual"></div>
@@ -172,8 +198,8 @@
           <div>
             <h2>Control the timing.</h2>
             <p>
-              This example is set to autoplay once on load so it is easier to verify the non-scroll path mode
-              without any trigger or scrub attributes.
+              The green-blue path draws once on load with `dv-path-mode="autoplay"`. The warm gradient path keeps
+              the original scroll-driven behavior with `dv-path-mode="scroll"`.
             </p>
           </div>
           <div class="visual"></div>

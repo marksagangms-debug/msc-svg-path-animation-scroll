@@ -4,10 +4,10 @@ This works like the MnB text background animation setup:
 
 1. Add one CDN script in Webstudio custom code.
 2. Add an HTML Embed for the SVG.
-3. Add `dv-path`, `dv-path-trigger`, and `dv-path-scrub` to the SVG path.
+3. Add `dv-path` to the SVG path, then choose `dv-path-mode="scroll"` or `dv-path-mode="autoplay"`.
 4. Add a small CSS block for positioning.
 
-The script auto-loads GSAP and ScrollTrigger. You do not need to add separate GSAP scripts.
+The script auto-loads GSAP, and only loads ScrollTrigger when the page actually has scroll paths or `dv-reveal`.
 
 ## 1) Add the Script in Webstudio
 
@@ -122,7 +122,7 @@ dv-path-trigger=".msc-page"
 
 ## Simple Attribute Setup
 
-Use this as the default:
+Use this as the default scroll setup:
 
 ```html
 <path
@@ -151,14 +151,28 @@ For debugging, temporarily add:
 
 ### Main Path Attribute
 
-- `dv-path`: turns the SVG path into a scroll-drawn path.
+- `dv-path`: enables path animation.
 - `dv_path`: underscore alias for backward compatibility.
+
+### Supported Path Modes
+
+Use one of these values:
+
+```html
+dv-path-mode="scroll"
+dv-path-mode="autoplay"
+```
+
+- `dv-path-mode="scroll"`: connects the path to ScrollTrigger.
+- `dv-path-mode="autoplay"`: draws the full path automatically and never attaches a ScrollTrigger.
+- If `dv-path-mode` is omitted, the path defaults to `scroll`.
 
 ### Scroll Timing
 
 - `dv-path-scrub="1.1"`: smooths the scroll animation.
 - `dv-path-trigger=".msc-page"`: the wrapper that controls the scroll range.
 - `dv_path_scrub` and `dv_path_trigger`: underscore aliases kept for backward compatibility.
+- These attributes only apply when `dv-path-mode="scroll"`.
 
 These are built-in defaults, so you usually do not need to add them:
 
@@ -199,7 +213,30 @@ For an infinite loop:
 - `dv-path-duration="2.4"`: seconds for one full path draw.
 - `dv-path-repeat="once"`: plays a single iteration.
 - `dv-path-repeat="infinite"`: loops forever.
+- `dv-path-trigger`, `dv-path-start`, `dv-path-end`, and `dv-path-scrub` are ignored in autoplay mode.
 - `dv_path_mode`, `dv_path_duration`, and `dv_path_repeat` remain supported as underscore aliases.
+
+### Mixed-Mode Example
+
+You can run autoplay and scroll paths on the same page:
+
+```html
+<path
+  dv-path
+  dv-path-mode="autoplay"
+  dv-path-duration="5"
+  dv-path-repeat="once"
+></path>
+
+<path
+  dv-path
+  dv-path-mode="scroll"
+  dv-path-trigger=".msc-page"
+  dv-path-scrub="1.1"
+></path>
+```
+
+This is also safe on pages that use `dv-reveal`.
 
 ### Draw Direction
 
@@ -228,6 +265,19 @@ dv-path-gradient-duration="5"
 - `dv-path-gradient`: CSS selector for the gradient to rotate.
 - `dv-path-gradient-center`: SVG rotation center.
 - `dv-path-gradient-duration`: seconds for one full rotation.
+
+### Debug Diagnostics
+
+When `dv-path-debug="true"` is present, the runtime logs the resolved mode and controller state in the console.
+
+The runtime also writes these DOM markers to each initialized path:
+
+- `data-dv-path-runtime`
+- `data-dv-path-mode-resolved`
+- `data-dv-path-init-count`
+- `data-dv-path-controller`
+
+Use those markers in Webstudio to confirm that an autoplay path resolved to `autoplay` and did not get a scroll controller.
 
 ## Optional Reveal Animation
 
@@ -265,7 +315,7 @@ Reveal attributes:
 - Script is in `Project Settings > Custom Code > Before </body>`.
 - SVG is inside an HTML Embed.
 - SVG `<path>` has `dv-path`.
-- SVG `<path>` has `dv-path-trigger=".msc-page"`.
+- Scroll-mode SVG `<path>` has `dv-path-trigger=".msc-page"`.
 - Your scroll wrapper has class `msc-page`.
 - CSS has `.msc-path-layer`.
 - The path has a visible `stroke`.
@@ -275,6 +325,7 @@ Reveal attributes:
 - If nothing animates, confirm the script URL uses `msc-svg-path-animation`.
 - If you recently changed the script, add a cache-buster to the CDN URL, for example `?v=latest`.
 - Add `dv-path-debug="true"` to the path and check the browser console for a `[dv-path] Initialized` message.
+- Inspect `data-dv-path-mode-resolved` and `data-dv-path-controller` on the published SVG path if Webstudio still behaves unexpectedly.
 - If the path is invisible, check `stroke`, `stroke-width`, and `z-index`.
 - If the path finishes too early, add class `msc-page` to the wrapper that contains all scroll sections.
 - If the path appears behind the page background, set your section backgrounds to transparent or raise the path layer `z-index`.
