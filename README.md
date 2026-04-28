@@ -166,6 +166,14 @@ For debugging, temporarily add:
 
 On mobile and touch devices, the path uses a passive native scroll driver instead of ScrollTrigger scrub. Reveal animations use IntersectionObserver on mobile too, so normal mobile setups avoid ScrollTrigger entirely and keep iOS flick momentum in Safari and Brave.
 
+The default mobile driver is `lite`, which throttles path drawing to reduce SVG repaint work while scrolling. If you need a different tradeoff, set `dv_path_mobile`:
+
+- `lite`: default, active mobile animation with lighter scroll updates.
+- `smooth`: updates every scroll frame; closest to desktop but heavier on iOS.
+- `settle`: most scroll-safe; updates after scrolling pauses.
+- `static`: renders the path in its final state.
+- `gsap`: forces the older ScrollTrigger-based mobile path behavior for comparison.
+
 These are built-in defaults, so you usually do not need to add them:
 
 - `dv_path_start="top top"`: starts when the trigger top reaches the viewport top.
@@ -226,10 +234,10 @@ dv-path-mobile="static"
 dv-path-mobile-gradient="true"
 ```
 
-To force the older ScrollTrigger-based mobile path behavior for testing, use:
+For the most scroll-safe animated mobile mode, use:
 
 ```html
-dv_path_mobile="gsap"
+dv_path_mobile="settle"
 ```
 
 ## Optional Reveal Animation
@@ -282,7 +290,7 @@ Reveal attributes:
 - If the path finishes too early, add class `msc-page` to the wrapper that contains all scroll sections.
 - If the path appears behind the page background, set your section backgrounds to transparent or raise the path layer `z-index`.
 - If Webstudio content loads after the script, run `window.dvPathRefresh()` from custom code.
-- If mobile scrolling feels heavy on an especially complex page, use `dv_path_mobile="static"` on the path as a fallback.
+- If mobile scrolling feels heavy on an especially complex page, use `dv_path_mobile="settle"` or `dv_path_mobile="static"` on the path as a fallback.
 - If you need to compare against the older mobile behavior, temporarily use `dv_path_mobile="gsap"`.
 
 ## Local Demo

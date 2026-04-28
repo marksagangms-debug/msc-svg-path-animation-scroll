@@ -403,9 +403,12 @@
   }
 
   function initMobilePathDriver(path, length, options) {
+    var mode = options.mobileMode || "lite";
     var start = 0;
     var end = 1;
     var ticking = false;
+    var scrollTimer;
+    var lastUpdate = 0;
     var passive = { passive: true };
     var driverViewport = getViewportSize();
 
@@ -446,16 +449,49 @@
         options.drawFrom + (options.drawTo - options.drawFrom) * progress;
 
       ticking = false;
+      lastUpdate = Date.now();
       setPathProgress(path, length, drawProgress);
     }
 
-    function requestUpdate() {
+    function requestSmoothUpdate() {
       if (ticking) {
         return;
       }
 
       ticking = true;
       window.requestAnimationFrame(update);
+    }
+
+    function requestLiteUpdate() {
+      var elapsed = Date.now() - lastUpdate;
+
+      window.clearTimeout(scrollTimer);
+
+      if (elapsed > 90) {
+        requestSmoothUpdate();
+        return;
+      }
+
+      scrollTimer = window.setTimeout(requestSmoothUpdate, 90 - elapsed);
+    }
+
+    function requestSettleUpdate() {
+      window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(requestSmoothUpdate, 140);
+    }
+
+    function requestUpdate() {
+      if (mode === "smooth") {
+        requestSmoothUpdate();
+        return;
+      }
+
+      if (mode === "settle") {
+        requestSettleUpdate();
+        return;
+      }
+
+      requestLiteUpdate();
     }
 
     window.addEventListener("scroll", requestUpdate, passive);
